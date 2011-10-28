@@ -14,8 +14,18 @@ Object.append(APP, new Events,new Options, {
     
     var script = new Element('script',{
       src: "//connect.facebook.net/en_US/all.js",
-      defer:"defer",
+      defer: "defer",
     }).inject(document.head);
+
+    this.addEvent('FB.Ready', function(){
+      FB.init({ 
+        appId: '280290902003741', 
+        status: true, 
+        cookie: true,
+        oauth: true
+      });
+      self.fireEvent('FB.Initialized:latched');
+    });
   },
   
   fbInit: function(){
@@ -40,5 +50,3 @@ Object.append(APP, new Events,new Options, {
 });
 
 APP.initialize();
-
-
