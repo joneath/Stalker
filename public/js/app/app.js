@@ -77,9 +77,9 @@ Object.append(APP, new Events,new Options, {
   }
   ,googleMapsInit: function(){
     this.fireEvent('GoogleMaps.Ready:latched');
-  },
+  }
   
-  socketConnect: function(){
+  ,socketConnect: function(){
     var self = this;
     self.socket = io.connect('http://localhost');
     self.socket.on('news', function (data) {
@@ -110,7 +110,7 @@ Object.append(APP, new Events,new Options, {
       console.log(self.Map);
       
       map.store('initialized', true);
-      map.inject(document.body);
+      map.inject($('app-wrapper'));
       self.fireEvent('Map.Ready:latched', self.Map);
     })
   }
