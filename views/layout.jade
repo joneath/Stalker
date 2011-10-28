@@ -1,9 +1,16 @@
 !!!
 html
-  head
+  head(prefix="og: http://ogp.me/ns#stalker_local: http://ogp.me/ns/apps/stalker_local#")
     title= title
+    meta(property="fb:app_id", content="166608743433101")
+    meta(property="og:type", content="stalker_local:location")
+    meta(property="og:title", content="Stalker")
+    meta(property="og:image", content="http://example.com/zhen/cookie.jpg")
+    meta(property="og:url", content="http://stalker.no.de/")
+    meta(name="apple-mobile-web-app-capable", content="yes")
+    meta(name="viewport", content="initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no")
     link(rel='stylesheet', href='/css/styles.css')
-  body!= body
-    script(src="/js/mootools/mootools-core.js")
-    script(src="/js/utils/Events.js")
-    script(src="/js/app/app.js");
+  body(onload="setTimeout(function() { window.scrollTo(0, 1) }, 100);")!= body
+  script(src="/js/mootools/mootools-core.js")
+  script(src="/js/utils/Events.js")
+  script(src="/js/app/app.js");

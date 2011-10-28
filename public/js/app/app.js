@@ -14,14 +14,15 @@ Object.append(APP, new Events,new Options, {
     
     var script = new Element('script',{
       src: "//connect.facebook.net/en_US/all.js",
-      defer: "defer",
+      defer: "defer"
     }).inject(document.head);
 
     this.addEvent('FB.Ready', function(){
       FB.init({ 
-        appId: '280290902003741', 
+        appId: '166608743433101', 
         status: true, 
         cookie: true,
+        xfbml: true,
         oauth: true
       });
       self.fireEvent('FB.Initialized:latched');
@@ -40,7 +41,7 @@ Object.append(APP, new Events,new Options, {
     // this will add the Facebook sdk to the page
     var script = new Element('script',{
       src: "//maps.googleapis.com/maps/api/js?sensor=false&callback=googleMapsAsyncInit",
-      defer:"defer",
+      defer:"defer"
     }).inject(document.head);
     
   },
