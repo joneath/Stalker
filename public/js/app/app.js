@@ -34,16 +34,16 @@ Object.append(APP, new Events,new Options, {
     
     this.addEvent('GoogleMaps.Ready', this.getMap);
   }
-  ,addFB: function(){
+  addFB: function(){
     var self = this;
     // this will add the Facebook sdk to the page.
     fbAsyncInit = function(){
       self.fbInit();
     };
-    
+    this.socketConnect();
     var script = new Element('script',{
       src: "//connect.facebook.net/en_US/all.js",
-      defer: "defer",
+      defer: "defer"
     }).inject(document.head);
 
     this.addEvent('FB.Ready', function(){
@@ -51,6 +51,7 @@ Object.append(APP, new Events,new Options, {
         appId: '280290902003741', 
         status: true, 
         cookie: true,
+        xfbml: true,
         oauth: true
       });
       self.fireEvent('FB.Initialized:latched');
@@ -70,12 +71,21 @@ Object.append(APP, new Events,new Options, {
     // this will add the Facebook sdk to the page
     var script = new Element('script',{
       src: "//maps.googleapis.com/maps/api/js?sensor=false&callback=googleMapsAsyncInit",
-      defer:"defer",
+      defer:"defer"
     }).inject(document.head);
     
   }
   ,googleMapsInit: function(){
     this.fireEvent('GoogleMaps.Ready:latched');
+  },
+  
+  socketConnect: function(){
+    var self = this;
+    self.socket = io.connect('http://localhost');
+    self.socket.on('news', function (data) {
+      console.log(data);
+      self.socket.emit('my other event', { my: 'data' });
+    });
   }
   ,getMap: function(){
     return this._map || this.buildMap();
