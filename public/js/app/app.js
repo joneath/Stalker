@@ -20,7 +20,7 @@ Object.append(APP, new Events,new Options, {
 
     this.addEvent('FB.Ready', function(){
       FB.init({ 
-        appId: '166608743433101', 
+        appId: '280290902003741', 
         status: true, 
         cookie: true,
         xfbml: true,
