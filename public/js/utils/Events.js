@@ -22,7 +22,7 @@ var Events = new Class({
   
   fireEvent: function(type){
     var type = this.removeLatch(type);
-    var args = Array.prototype.slice.call(arguments,1);
+    var args = Array.prototype.slice.call(arguments,0);
     args[0] = type;
     this.parent.apply(this,args);
   }

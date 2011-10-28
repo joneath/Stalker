@@ -158,3 +158,6 @@ body {
 #fb-root {
   display: none;
 }
+#map {
+  height: 300px;
+}
