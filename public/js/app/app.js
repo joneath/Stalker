@@ -4,6 +4,7 @@ Object.append(APP, new Events,new Options, {
     this.setOptions(options);
     this.addFB();
     this.addGoogleMaps();
+    this.socketConnect();
   },
   addFB: function(){
     var self = this;
@@ -46,6 +47,15 @@ Object.append(APP, new Events,new Options, {
   },
   googleMapsInit: function(){
     this.fireEvent('GoogleMaps.Ready:latched');
+  },
+  
+  socketConnect: function(){
+    var self = this;
+    self.socket = io.connect('http://localhost');
+    self.socket.on('news', function (data) {
+      console.log(data);
+      self.socket.emit('my other event', { my: 'data' });
+    });
   }
 });
 
