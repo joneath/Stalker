@@ -34,7 +34,7 @@ Object.append(APP, new Events,new Options, {
     
     this.addEvent('GoogleMaps.Ready', this.getMap);
   }
-  addFB: function(){
+  ,addFB: function(){
     var self = this;
     // this will add the Facebook sdk to the page.
     fbAsyncInit = function(){
