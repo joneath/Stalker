@@ -5,8 +5,10 @@
 
 var express = require('express')
   , routes = require('./routes')
+  , socket = require('socket.io');
 
-var app = module.exports = express.createServer();
+var app = module.exports = express.createServer()
+  , io = socket.listen(app);
 
 // Configuration
 
