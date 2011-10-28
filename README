@@ -1,1 +1,4 @@
 ## Use Express
+1.  Clone the project
+2.  cd to that directory... cd ~/Stalker
+3.  start express `node app/app.js`
