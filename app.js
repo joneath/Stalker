@@ -60,7 +60,7 @@ io.sockets.on('connection', function (socket) {
     //     stalkers[stalker].user.t = d.getMilliseconds();
     //     socket.emit('position_change', stalkers[stalker].user);
     //   }
-    //   stalkers[socket.id] = { user: user, socket: socket };
+       stalkers[socket.id] = { user: user, socket: socket };
     // }
 
     // Notify all stalkers of position change
