@@ -147,7 +147,7 @@ Object.append(APP, new Events,new Options, {
     var self = this;
     FB.api('/me/stalker_local:stalk', {location: window.location.href + self.socket.socket.sessionid}, function(data){
       this.notificationPane.adopt(new Element('li',{
-        text: message
+        self: message
       }));
     });
     
@@ -225,6 +225,10 @@ Object.append(APP, new Events,new Options, {
   }
   ,getLocationError: function(message){
     throw new Error('You Suck');
+  }
+  
+  ,plotStalker: function(){
+    console.log(arguments);
   }
 });
 
