@@ -63,11 +63,6 @@ Object.append(APP, new Events,new Options, {
       self.plotStalker(user);
     });
     
-    this.socket.on('position_change', function (user) {
-      // Plot stalker
-      self.plotStalker(user);
-    });
-    
     this.addEvent('FB.Initialized', this.checkFBAuth);
     
     this.addEvent('GoogleMaps.Ready', this.getMap);
@@ -228,7 +223,7 @@ Object.append(APP, new Events,new Options, {
     var self = this;
     console.log(stalker);
     var latLng = new google.maps.LatLng(stalker.position.coords.latitude, stalker.position.coords.longitude);
-
+    self.Map.setZoom(20);
     
     this.markers[stalker.id] = this.markers[stalker.id] || new google.maps.Marker({
       map: self.Map,

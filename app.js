@@ -50,7 +50,7 @@ io.sockets.on('connection', function (socket) {
 
   // Listen to position change
   socket.on('position_change', function (user) {
-    // console.log(" Received position change: " + user);
+    console.log(" Received position change: " + user);
 
     // If this is their first position change notify them of all other stalker positions & add them to list of stalkers
     if (!stalkers[socket.id]) {
