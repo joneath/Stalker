@@ -1,16 +1,15 @@
-plotStalker = function(user){
-  console.log(user)
-}
 var APP = {};
 Object.append(APP, new Events,new Options, {
   user: {
      position:null
     ,latLng: null
   }
+  ,markers: {}
   ,initialize: function(options){
     this.setOptions(options);
     this.addFB();
     this.addGoogleMaps();
+    this.socketConnect();
     this.attachEvents();
     this.setupToggle();
   }
@@ -32,6 +31,7 @@ Object.append(APP, new Events,new Options, {
       this.store('clicked', clicked?false:true);
     });
     
+    
   }
   ,attachEvents: function(){
     var self = this;
@@ -45,8 +45,6 @@ Object.append(APP, new Events,new Options, {
         self.publishNotification(self.user.me + ' has moved.');
       }
       eventCount += 1;
-      
-      
 
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -55,17 +53,21 @@ Object.append(APP, new Events,new Options, {
         self.addEvent('Map.Ready', function(){
           if(!self.Map) throw new Error('Map wasn\'t really ready.');
           self.Map.panTo(latLng);
-          self.Map.setZoom(10);
-          
-          var marker = new google.maps.Marker({
-            position: latLng, 
-            map: self.Map, 
-            title:"You are here!"
-          });
+          self.Map.setZoom(12);
         });
       });
     });
-
+    
+    this.socket.on('position_change', function (user) {
+      // Plot stalker
+      self.plotStalker(user);
+    });
+    
+    this.socket.on('position_change', function (user) {
+      // Plot stalker
+      self.plotStalker(user);
+    });
+    
     this.addEvent('FB.Initialized', this.checkFBAuth);
     
     this.addEvent('GoogleMaps.Ready', this.getMap);
@@ -89,7 +91,7 @@ Object.append(APP, new Events,new Options, {
     fbAsyncInit = function(){
       self.fbInit();
     };
-    this.socketConnect();
+    
     var script = new Element('script',{
       src: "//connect.facebook.net/en_US/all.js",
       defer: "defer"
@@ -138,6 +140,7 @@ Object.append(APP, new Events,new Options, {
     var self = this;
     FB.api('/me', function(response) {
       Object.append(self.user, response);
+      self.marker = new google.maps.Marker
       self.fireEvent('FB.LoggedIn');
       self.hideLoginOverlay();
     });
@@ -173,10 +176,6 @@ Object.append(APP, new Events,new Options, {
   ,socketConnect: function(){
     var self = this;
     self.socket = io.connect(window.location.href);
-    self.socket.on('position_change', function (user) {
-      // Plot stalker
-      self.plotStalker(user);
-    });
   }
   ,getMap: function(){
     return this._map || this.buildMap();
@@ -208,9 +207,9 @@ Object.append(APP, new Events,new Options, {
   // Location Methods
   ,getUserLocation: function(){
     var self = this;
-    navigator.geolocation.getCurrentPosition(self.getLocationSuccess.bind(self), self.getLocationError.bind(self));
+    navigator.geolocation.getCurrentPosition(self.getLocationSuccess.bind(self), self.getLocationError.bind(self), {enableHighAccuracy:false});
     setInterval(function(){
-      navigator.geolocation.getCurrentPosition(self.getLocationSuccess.bind(self), self.getLocationError.bind(self));
+      navigator.geolocation.getCurrentPosition(self.getLocationSuccess.bind(self), self.getLocationError.bind(self), {enableHighAccuracy:false});
     }, 5000);
   }
   
@@ -227,8 +226,14 @@ Object.append(APP, new Events,new Options, {
     throw new Error('You Suck');
   }
   
-  ,plotStalker: function(){
+  ,plotStalker: function(stalker){
     console.log(arguments);
+    this.markers[stalker.id] = this.stalkers[stalker.id] || new google.maps.Marker({
+      position: stalker.latLng, 
+      map: self.Map
+    });
+
+    theStalker.marker.setPosition(theStalker.latLng);
   }
 });
 
