@@ -15,6 +15,8 @@ Object.append(APP, new Events,new Options, {
     this.addEvent('User.Position.Changed', function(position){
       self.socket.emit('position_change', self.user);
 
+      self.update_fb_status(position);
+
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -40,6 +42,15 @@ Object.append(APP, new Events,new Options, {
 
     $('fb_login').addEvent('click', this.loginFBUser.bind(this));
   }
+
+  ,showLoginOverlay: function(){
+    $('login_overlay').show();
+  }
+
+  ,hideLoginOverlay: function(){
+    $('login_overlay').hide();
+  }
+
   ,addFB: function(){
     var self = this;
     // this will add the Facebook sdk to the page.
@@ -80,14 +91,6 @@ Object.append(APP, new Events,new Options, {
     });
   }
 
-  ,showLoginOverlay: function(){
-    $('login_overlay').show();
-  }
-
-  ,hideLoginOverlay: function(){
-    $('login_overlay').hide();
-  }
-
   ,loginFBUser: function(){
     var self = this;
     FB.login(function(response) {
@@ -104,6 +107,12 @@ Object.append(APP, new Events,new Options, {
     FB.api('/me', function(response) {
       self.fireEvent('FB.LoggedIn');
       self.hideLoginOverlay();
+    });
+  }
+
+  ,update_fb_status: function(){
+    FB.api('/me/stalker_local:stalk', function(data){
+      console.log(data);
     });
   }
   
