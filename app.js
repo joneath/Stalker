@@ -34,11 +34,37 @@ app.configure('production', function(){
 
 app.get('/', routes.index);
 
+// Socket I/O
+
+stalkers = {};
+
+// Listen to client connections
 io.sockets.on('connection', function (socket) {
-  socket.emit('news', { hello: 'world' });
-  socket.on('my other event', function (data) {
-    console.log(data);
+
+  // Listen to position change
+  socket.on('position_change', function (data) {
+    console.log(" Received position change: " + data.user.name + " (" + data.user.latLon + ")");
+
+    // If this is their first position change notify them of all other stalker positions & add them to list of stalkers
+    if (!stalkers[socket]) {
+      for (stalker in stalkers) {
+        socket.emit('position_change', { user: stalkers[stalker] });
+      }
+      stalkers[socket] = data.user;
+    }
+
+    // Notify all stalkers of position change
+    for (stalker in stalkers) {
+      stalker.emit('position_change', { user: stalkers[stalker] });
+    }
   });
+
+  // List to disconnect
+  io.sockets.on('disconnect', function() {
+    // Remove from list of stalkers
+    delete stalkers[socket];
+  });
+
 });
 
 app.listen(process.env.PORT || 3000);

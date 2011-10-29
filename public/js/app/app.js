@@ -14,6 +14,7 @@ Object.append(APP, new Events,new Options, {
   ,attachEvents: function(){
     var self = this;
     this.addEvent('User.Position.Changed', function(position){
+      self.socket.emit('position_change', user);
 
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -82,9 +83,9 @@ Object.append(APP, new Events,new Options, {
   ,socketConnect: function(){
     var self = this;
     self.socket = io.connect('http://localhost');
-    self.socket.on('news', function (data) {
-      console.log(data);
-      self.socket.emit('my other event', { my: 'data' });
+    self.socket.on('position_change', function (data) {
+      // Plot stalker
+      plotStalker(data.user);
     });
   }
   ,getMap: function(){
