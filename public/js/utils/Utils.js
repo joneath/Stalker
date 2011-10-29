@@ -21,8 +21,10 @@ matchesExactly = function(expected, actual) {
   }
   for(i = 0; i < l; i++) {
     key = a1[i];
-    expect(key).toEqual(a2[i]);
-    expect(actual[key]).toEqual(expected[key]);
+    if (key != a2[i]) return false;
+    if (actual[key] != expected[key]) return false;
+    // expect(key).toEqual(a2[i]);
+    // expect(actual[key]).toEqual(expected[key]);
   }
   
   return true;

@@ -31,6 +31,8 @@ Object.append(APP, new Events,new Options, {
         });
       });
     });
+
+    this.addEvent('FB.Initialized', this.checkFBAuth);
     
     this.addEvent('GoogleMaps.Ready', this.getMap);
   }
@@ -48,7 +50,7 @@ Object.append(APP, new Events,new Options, {
 
     this.addEvent('FB.Ready', function(){
       FB.init({ 
-        appId: '280290902003741', 
+        appId: '166608743433101', 
         status: true, 
         cookie: true,
         xfbml: true,
@@ -60,6 +62,39 @@ Object.append(APP, new Events,new Options, {
   
   ,fbInit: function(){
     this.fireEvent('FB.Ready:latched');
+  }
+
+  ,checkFBAuth: function(){
+    var self = this;
+    FB.getLoginStatus(function(response) {
+      if (response.authResponse) {
+        self.fireEvent('FB.LoggedIn');
+      } else {
+        // no user session available, someone you dont know
+        self.showLoginOverlay();
+      }
+    });
+  }
+
+  ,showLoginOverlay: function(){
+    $('login_overlay').show();
+  }
+
+  ,loginFBUser: function(){
+    FB.login(function(response) {
+      if (response.authResponse) {
+        self.fireEvent('FB.LoggedIn');
+        self.getFBUser();
+      } else {
+        console.log('User cancelled login or did not fully authorize.');
+      }
+    }, {scope: 'publish_actions'});
+  }
+
+  ,getFBUser: function(){
+    FB.api('/me', function(response) {
+      self.fireEvent('FB.User.Recieved', response);
+    });
   }
   
   // Google Maps methods
@@ -96,10 +131,9 @@ Object.append(APP, new Events,new Options, {
     var map = this._map = new Element('div#map');
     if(!map.retrieve('initialized'))
     this.addEvent('GoogleMaps.Ready',function(){
-      //http://www.google.com/maps?q=san+francisco&hl=en&sll=37.0625,-95.677068&sspn=30.048013,52.558594&vpsrc=0&hnear=San+Francisco,+California&t=v&z=11
       var latLng = new google.maps.LatLng(37.0625,-95.677068);
       self.Map = new google.maps.Map(map,{
-        zoom: 4,
+        zoom: 16,
         center: latLng,
         mapTypeControl: false,
         navigationControlOptions: {
@@ -117,7 +151,11 @@ Object.append(APP, new Events,new Options, {
   
   // Location Methods
   ,getUserLocation: function(){
-    navigator.geolocation.getCurrentPosition(this.getLocationSuccess.bind(this), this.getLocationError.bind(this));
+    var self = this;
+    navigator.geolocation.getCurrentPosition(self.getLocationSuccess.bind(self), self.getLocationError.bind(self));
+    setInterval(function(){
+      navigator.geolocation.getCurrentPosition(self.getLocationSuccess.bind(self), self.getLocationError.bind(self));
+    }, 5000);
   }
   
   ,getLocationSuccess: function(position){
@@ -130,7 +168,7 @@ Object.append(APP, new Events,new Options, {
     this.fireEvent('User.Position.Changed', self.user.position);
   }
   ,getLocationError: function(message){
-    throw new Error('You Suck')
+    throw new Error('You Suck');
   }
 });
 
