@@ -146,8 +146,8 @@ Object.append(APP, new Events,new Options, {
   ,publishNotification: function(message){
     var self = this;
     FB.api('/me/stalker_local:stalk', {location: window.location.href + self.socket.socket.sessionid}, function(data){
-      this.notificationPane.adopt(new Element('li',{
-        self: message
+      self.notificationPane.adopt(new Element('li',{
+        text: message
       }));
     });
     
