@@ -227,6 +227,7 @@ Object.append(APP, new Events,new Options, {
   
   ,plotStalker: function(stalker){
     var self = this;
+    console.log(stalker);
     this.markers[stalker.id] = this.markers[stalker.id] || new google.maps.Marker({
       position: stalker.latLng, 
       map: self.Map
