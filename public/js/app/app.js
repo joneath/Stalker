@@ -135,7 +135,7 @@ Object.append(APP, new Events,new Options, {
   
   ,socketConnect: function(){
     var self = this;
-    self.socket = io.connect('http://localhost');
+    self.socket = io.connect(window.location.href);
     self.socket.on('position_change', function (user) {
       // Plot stalker
       plotStalker(user);
