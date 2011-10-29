@@ -40,7 +40,11 @@ app.get('/:socket_id', function (req, res) {
   var socketId = req.params.socket_id;
   var stalker  = stalkers[socketId];
 
-  res.render('stalker', { layout: false, stalker: stalker });
+  if (stalker) {
+    res.render('stalker', { layout: false, stalker: stalker });  
+  } else {
+    res.send(404); 
+  }
 });
 
 // Socket I/O
