@@ -44,7 +44,6 @@ Object.append(APP, new Events,new Options, {
       if (eventCount % 6 == 0 && eventCount > 0){
         self.publishNotification(self.user.me + ' has moved.');
       }
-      eventCount += 1;
 
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -52,6 +51,8 @@ Object.append(APP, new Events,new Options, {
         // Make sure the map is available...
         self.addEvent('Map.Ready', function(){
           if(!self.Map) throw new Error('Map wasn\'t really ready.');
+
+          self.Map.panTo(latLng);
         });
       });
     });
