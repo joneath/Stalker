@@ -1,6 +1,8 @@
 @import 'reset'
 @import 'base'
 
+headerHeight = 40px
+
 body 
   font normal 14px/17px "Helvetica","Arial",sans-serif
   
@@ -15,7 +17,7 @@ body
   bottom: 0px
   
   #app-title
-    height: 40px
+    height: headerHeight
     background: #fff
     box-shadow 0 0 5px rgba(0,0,0,.5)
     position: absolute
@@ -28,13 +30,25 @@ body
       padding: 5px
       line-height: 30px
       border-bottom-width: 0
-    
-  #app-content
+      
+    #toggle-pane 
+      display: block
+      position: absolute
+      right: 10px
+      top: 5px
+      border: 1px #ccc solid
+      border-radius: 5px
+      padding: 5px 10px
+      
+  .full-page 
     position: absolute
-    top: 40px
+    top: 0
     left: 0
     right: 0
     bottom: 0
+    
+  #app-map-wrapper
+    top: headerHeight
     z-index: 2
     background: #efefef
     
@@ -45,30 +59,34 @@ body
       bottom: 0
       right: 0
 
-    #login_overlay
-      background: rgba(0,0,0,0.7)
+    #login-overlay
+      background-color: rgba(#dedede,.7)
       position: absolute
       top: 0
       left: 0
       bottom: 0
       right: 0
       z-index: 3
+      
+    #fb_login
+      background: url(https://s3.amazonaws.com/joneath/signin_facebook.png)
+      cursor: pointer
+      margin: 0 auto
+      position: absolute
+      top: 50%
+      left: 50%
+      width: w = 150px
+      height: h = 22px
+      margin-left: -(w / 2)
+      margin-top: -(h / 2)
 
-      #fb_login
-        background: url(https://s3.amazonaws.com/joneath/signin_facebook.png)
-        cursor: pointer
-        margin: 0 auto
-        position: absolute
-        top: 50%
-        left: 50%
-        width: w = 150px
-        height: h = 22px
-        margin-left: -(w / 2)
-        margin-top: -(h / 2)
-
-      #fb_login:active
-        background: url(https://s3.amazonaws.com/joneath/signin_facebook.png)
-        background-position: -0 -24px;
-        cursor: pointer
-        height: 22px
-        width: 150px
+    #fb_login:active
+      background: url(https://s3.amazonaws.com/joneath/signin_facebook.png)
+      background-position: -0 -24px;
+      cursor: pointer
+      height: 22px
+      width: 150px
+      
+  #app-notifications-wrapper
+    top: headerHeight
+    z-index: 1
