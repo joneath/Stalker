@@ -9,7 +9,6 @@ Object.append(APP, new Events,new Options, {
     this.addFB();
     this.addGoogleMaps();
     this.attachEvents();
-    this.getUserLocation();
   }
   ,attachEvents: function(){
     var self = this;
@@ -36,6 +35,10 @@ Object.append(APP, new Events,new Options, {
     this.addEvent('FB.Initialized', this.checkFBAuth);
     
     this.addEvent('GoogleMaps.Ready', this.getMap);
+
+    this.addEvent('FB.LoggedIn', this.getUserLocation);
+
+    $('fb_login').addEvent('click', this.loginFBUser.bind(this));
   }
   ,addFB: function(){
     var self = this;
@@ -51,7 +54,7 @@ Object.append(APP, new Events,new Options, {
 
     this.addEvent('FB.Ready', function(){
       FB.init({ 
-        appId: '166608743433101', 
+        appId: '280290902003741', 
         status: true, 
         cookie: true,
         xfbml: true,
@@ -69,7 +72,7 @@ Object.append(APP, new Events,new Options, {
     var self = this;
     FB.getLoginStatus(function(response) {
       if (response.authResponse) {
-        self.fireEvent('FB.LoggedIn');
+        self.getFBUser();
       } else {
         // no user session available, someone you dont know
         self.showLoginOverlay();
@@ -81,10 +84,14 @@ Object.append(APP, new Events,new Options, {
     $('login_overlay').show();
   }
 
+  ,hideLoginOverlay: function(){
+    $('login_overlay').hide();
+  }
+
   ,loginFBUser: function(){
+    var self = this;
     FB.login(function(response) {
       if (response.authResponse) {
-        self.fireEvent('FB.LoggedIn');
         self.getFBUser();
       } else {
         console.log('User cancelled login or did not fully authorize.');
@@ -93,8 +100,10 @@ Object.append(APP, new Events,new Options, {
   }
 
   ,getFBUser: function(){
+    var self = this;
     FB.api('/me', function(response) {
-      self.fireEvent('FB.User.Recieved', response);
+      self.fireEvent('FB.LoggedIn');
+      self.hideLoginOverlay();
     });
   }
   
@@ -147,7 +156,7 @@ Object.append(APP, new Events,new Options, {
       map.store('initialized', true);
       map.inject($('app-content'));
       self.fireEvent('Map.Ready:latched', self.Map);
-    })
+    });
   }
   
   // Location Methods

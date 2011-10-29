@@ -7,6 +7,7 @@ body
 #fb-root
   display none
 #app-wrapper
+  min-height: 416px
   position: absolute
   top:0px
   left: 0px
@@ -45,11 +46,29 @@ body
       right: 0
 
     #login_overlay
-      background-color: #dedede
-      opacity: 0.7
+      background: rgba(0,0,0,0.7)
       position: absolute
       top: 0
       left: 0
       bottom: 0
       right: 0
+      z-index: 3
 
+      #fb_login
+        background: url(https://s3.amazonaws.com/joneath/signin_facebook.png)
+        cursor: pointer
+        margin: 0 auto
+        position: absolute
+        top: 50%
+        left: 50%
+        width: w = 150px
+        height: h = 22px
+        margin-left: -(w / 2)
+        margin-top: -(h / 2)
+
+      #fb_login:active
+        background: url(https://s3.amazonaws.com/joneath/signin_facebook.png)
+        background-position: -0 -24px;
+        cursor: pointer
+        height: 22px
+        width: 150px
