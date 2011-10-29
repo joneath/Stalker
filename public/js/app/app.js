@@ -52,8 +52,6 @@ Object.append(APP, new Events,new Options, {
         // Make sure the map is available...
         self.addEvent('Map.Ready', function(){
           if(!self.Map) throw new Error('Map wasn\'t really ready.');
-          self.Map.panTo(latLng);
-          self.Map.setZoom(12);
         });
       });
     });
