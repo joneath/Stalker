@@ -230,11 +230,9 @@ Object.append(APP, new Events,new Options, {
     console.log(stalker);
     var latLng = new google.maps.LatLng(stalker.position.coords.latitude, stalker.position.coords.longitude)
     this.markers[stalker.id] = this.markers[stalker.id] || new google.maps.Marker({
-      position: latLng, 
       map: self.Map
     });
-
-    theStalker.marker.setPosition(latLng);
+    this.markers[stalker.id].marker.setPosition(latLng);
   }
 });
 
