@@ -42,11 +42,11 @@ Object.append(APP, new Events,new Options, {
       console.log(self.socket.socket.sessionid);
 
       if (eventCount % 6 == 0){
-        self.update_fb_status(position);
+        self.publishNotification(self.user.me + ' has moved.');
       }
       eventCount += 1;
       
-      self.publishNotification(self.user.me + ' has moved.');
+      
 
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -76,11 +76,11 @@ Object.append(APP, new Events,new Options, {
   }
 
   ,showLoginOverlay: function(){
-    $('login_overlay').show();
+    $('login-overlay').show();
   }
 
   ,hideLoginOverlay: function(){
-    $('login_overlay').hide();
+    $('login-overlay').hide();
   }
 
   ,addFB: function(){
