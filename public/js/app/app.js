@@ -228,6 +228,7 @@ Object.append(APP, new Events,new Options, {
   ,plotStalker: function(stalker){
     var self = this;
     console.log(stalker);
+    self.Map.setZoom(16);
     var latLng = new google.maps.LatLng(stalker.position.coords.latitude, stalker.position.coords.longitude)
     
     this.markers[stalker.id] = this.markers[stalker.id] || new google.maps.Marker({
