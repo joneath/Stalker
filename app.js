@@ -43,20 +43,19 @@ io.sockets.on('connection', function (socket) {
 
   // Listen to position change
   socket.on('position_change', function (user) {
-    
-    console.log(" Received position change: " + (user.name || ":)") + " (" + user.latLng + ")");
+    // console.log(" Received position change: " + user);
 
     // If this is their first position change notify them of all other stalker positions & add them to list of stalkers
     if (!stalkers[socket.id]) {
-      for (var stalker in stalkers) {
-        socket.emit('position_change', stalkers[stalker] );
+      for (stalker in stalkers) {
+        socket.emit('position_change', stalkers[stalker].user);
       }
-      stalkers[socket.id] = user;
+      stalkers[socket.id] = { user: user, socket: socket};
     }
 
     // Notify all stalkers of position change
-    for (var stalker in stalkers) {
-      stalker.emit('position_change', stalkers[stalker]);
+    for (stalker in stalkers) {
+      stalkers[stalker].socket.emit('position_change', stalkers[stalker].user);
     }
   });
 
