@@ -12,10 +12,14 @@ Object.append(APP, new Events,new Options, {
   }
   ,attachEvents: function(){
     var self = this;
+    var eventCount = 0;
     this.addEvent('User.Position.Changed', function(position){
       self.socket.emit('position_change', self.user);
 
-      self.update_fb_status(position);
+      if (eventCount % 6){
+        self.update_fb_status(position);
+      }
+      eventCount += 1;
 
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -105,13 +109,16 @@ Object.append(APP, new Events,new Options, {
   ,getFBUser: function(){
     var self = this;
     FB.api('/me', function(response) {
+      Object.append(self.user, response.data);
       self.fireEvent('FB.LoggedIn');
       self.hideLoginOverlay();
     });
   }
 
   ,update_fb_status: function(){
-    FB.api('/me/stalker_local:stalk', function(data){
+    var self = this;
+    console.log(window.location.href + self.socket.socket.sessionid);
+    FB.api('/me/stalker_local:stalk', {location: window.location.href + self.socket.socket.sessionid}, function(data){
       console.log(data);
     });
   }
