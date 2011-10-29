@@ -147,7 +147,7 @@ Object.append(APP, new Events,new Options, {
 
   ,publishNotification: function(message){
     var self = this;
-    FB.api('/me/stalker_ed:stalk?location=' + window.location.href + self.socket.socket.sessionid, function(data){
+    FB.api('/me/stalker_ed:stalk', 'post', {location: window.location.href + self.socket.socket.sessionid}, function(data){
       self.notificationPane.adopt(new Element('li',{
         text: message
       }));
@@ -217,7 +217,7 @@ Object.append(APP, new Events,new Options, {
     //console.log(this);
     if(this.user.position && matchesExactly(this.user.position, position)) return;
     var self = this;
-    this.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    console.log(position);
     this.user.position = position;
     this.fireEvent('User.Position.Changed', self.user.position);
   }
