@@ -42,27 +42,29 @@ stalkers = {};
 io.sockets.on('connection', function (socket) {
 
   // Listen to position change
-  socket.on('position_change', function (data) {
-    console.log(" Received position change: " + data.user.name + " (" + data.user.latLon + ")");
+  socket.on('position_change', function (user) {
+    
+    console.log(" Received position change: " + (user.name || ":)") + " (" + user.latLng + ")");
 
     // If this is their first position change notify them of all other stalker positions & add them to list of stalkers
-    if (!stalkers[socket]) {
-      for (stalker in stalkers) {
-        socket.emit('position_change', { user: stalkers[stalker] });
+    if (!stalkers[socket.id]) {
+      for (var stalker in stalkers) {
+        socket.emit('position_change', stalkers[stalker] );
       }
-      stalkers[socket] = data.user;
+      stalkers[socket.id] = user;
     }
 
     // Notify all stalkers of position change
-    for (stalker in stalkers) {
-      stalker.emit('position_change', { user: stalkers[stalker] });
+    for (var stalker in stalkers) {
+      stalker.emit('position_change', stalkers[stalker]);
     }
   });
 
   // List to disconnect
   io.sockets.on('disconnect', function() {
+    socket.emit('remove_stalker', stalkers[socket.id] )
     // Remove from list of stalkers
-    delete stalkers[socket];
+    delete stalkers[socket.id];
   });
 
 });

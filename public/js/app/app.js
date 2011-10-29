@@ -1,3 +1,6 @@
+plotStalker = function(user){
+  console.log(user)
+}
 var APP = {};
 Object.append(APP, new Events,new Options, {
   user: {
@@ -14,7 +17,7 @@ Object.append(APP, new Events,new Options, {
   ,attachEvents: function(){
     var self = this;
     this.addEvent('User.Position.Changed', function(position){
-      self.socket.emit('position_change', user);
+      self.socket.emit('position_change', self.user);
 
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -23,6 +26,7 @@ Object.append(APP, new Events,new Options, {
         self.addEvent('Map.Ready', function(){
           if(!self.Map) throw new Error('Map wasn\'t really ready.');
           self.Map.panTo(latLng);
+          self.Map.setZoom(10);
           
           var marker = new google.maps.Marker({
             position: latLng, 
@@ -118,9 +122,9 @@ Object.append(APP, new Events,new Options, {
   ,socketConnect: function(){
     var self = this;
     self.socket = io.connect('http://localhost');
-    self.socket.on('position_change', function (data) {
+    self.socket.on('position_change', function (user) {
       // Plot stalker
-      plotStalker(data.user);
+      plotStalker(user);
     });
   }
   ,getMap: function(){
@@ -134,7 +138,7 @@ Object.append(APP, new Events,new Options, {
     this.addEvent('GoogleMaps.Ready',function(){
       var latLng = new google.maps.LatLng(37.0625,-95.677068);
       self.Map = new google.maps.Map(map,{
-        zoom: 16,
+        zoom: 4,
         center: latLng,
         mapTypeControl: false,
         navigationControlOptions: {
@@ -145,7 +149,7 @@ Object.append(APP, new Events,new Options, {
       console.log(self.Map);
       
       map.store('initialized', true);
-      map.inject($('app-content'));
+      map.inject($('app-map-wrapper'));
       self.fireEvent('Map.Ready:latched', self.Map);
     })
   }
