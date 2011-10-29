@@ -227,12 +227,14 @@ Object.append(APP, new Events,new Options, {
   
   ,plotStalker: function(stalker){
     var self = this;
+    console.log(stalker);
+    var latLng = new google.maps.LatLng(stalker.position.coords.latitude, stalker.position.coords.longitude)
     this.markers[stalker.id] = this.markers[stalker.id] || new google.maps.Marker({
-      position: stalker.latLng, 
+      position: latLng, 
       map: self.Map
     });
 
-    theStalker.marker.setPosition(theStalker.latLng);
+    theStalker.marker.setPosition(latLng);
   }
 });
 
