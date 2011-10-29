@@ -1,4 +1,6 @@
-h1= title
-p Welcome to #{title}
 div#app-wrapper
-div(class="fb-add-to-timeline",data-show-faces="true",data-mode="button")
+  div#app-title
+    h1= title
+  div#app-content
+    div#login_overlay(style="display:none;")
+      <div class="fb-login-button">Login with Facebook</div>
