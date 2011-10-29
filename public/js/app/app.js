@@ -16,7 +16,7 @@ Object.append(APP, new Events,new Options, {
     this.addEvent('User.Position.Changed', function(position){
       self.socket.emit('position_change', self.user);
 
-      if (eventCount % 6){
+      if (eventCount % 6 == 0){
         self.update_fb_status(position);
       }
       eventCount += 1;
@@ -145,7 +145,7 @@ Object.append(APP, new Events,new Options, {
     self.socket = io.connect(window.location.href);
     self.socket.on('position_change', function (user) {
       // Plot stalker
-      plotStalker(user);
+      self.plotStalker(user);
     });
   }
   ,getMap: function(){
