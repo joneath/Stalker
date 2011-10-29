@@ -1,7 +1,7 @@
 matchesExactly = function(expected, actual) {
   var a1, a2,
     l, i,
-    key;
+    key
   
   var getKeys = function(o) {
     var a = [];

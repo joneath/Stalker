@@ -110,7 +110,7 @@ Object.append(APP, new Events,new Options, {
       console.log(self.Map);
       
       map.store('initialized', true);
-      map.inject($('app-wrapper'));
+      map.inject($('app-content'));
       self.fireEvent('Map.Ready:latched', self.Map);
     })
   }
