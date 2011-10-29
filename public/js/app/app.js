@@ -41,7 +41,7 @@ Object.append(APP, new Events,new Options, {
 
       console.log(self.socket.socket.sessionid);
 
-      if (eventCount % 6 == 0){
+      if (eventCount % 6 == 0 && eventCount > 0){
         self.publishNotification(self.user.me + ' has moved.');
       }
       eventCount += 1;
@@ -152,7 +152,6 @@ Object.append(APP, new Events,new Options, {
         text: message
       }));
     });
-    
   }
   
   // Google Maps methods
