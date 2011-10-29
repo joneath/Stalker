@@ -30,13 +30,20 @@ app.configure('production', function(){
   app.use(express.errorHandler()); 
 });
 
+var stalkers = {};
+
 // Routes
 
 app.get('/', routes.index);
 
-// Socket I/O
+app.get('/:socket_id', function (req, res) {
+  var socketId = req.params.socket_id;
+  var stalker  = stalkers[socketId];
 
-stalkers = {};
+  res.render('stalker', { layout: false, stalker: stalker });
+});
+
+// Socket I/O
 
 // Listen to client connections
 io.sockets.on('connection', function (socket) {
@@ -50,7 +57,7 @@ io.sockets.on('connection', function (socket) {
       for (stalker in stalkers) {
         socket.emit('position_change', stalkers[stalker].user);
       }
-      stalkers[socket.id] = { user: user, socket: socket};
+      stalkers[socket.id] = { user: user, socket: socket };
     }
 
     // Notify all stalkers of position change
@@ -60,9 +67,11 @@ io.sockets.on('connection', function (socket) {
   });
 
   // List to disconnect
-  io.sockets.on('disconnect', function() {
-    // Remove from list of stalkers
-    delete stalkers[socket.id];
+  socket.on('disconnect', function() {
+    // Remove from list of stalkers after 60 seconds
+    setTimeout(function() {
+      delete stalkers[socket.id];
+    }, 60000);
   });
 
 });
