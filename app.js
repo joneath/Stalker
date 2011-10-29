@@ -54,14 +54,14 @@ io.sockets.on('connection', function (socket) {
 
     d = new Date();
     // If this is their first position change notify them of all other stalker positions & add them to list of stalkers
-    if (!stalkers[socket.id]) {
-      for (stalker in stalkers) {
+    // if (!stalkers[socket.id]) {
+    //   for (stalker in stalkers) {
 
-        stalkers[stalker].user.t = d.getMilliseconds();
-        socket.emit('position_change', stalkers[stalker].user);
-      }
-      stalkers[socket.id] = { user: user, socket: socket };
-    }
+    //     stalkers[stalker].user.t = d.getMilliseconds();
+    //     socket.emit('position_change', stalkers[stalker].user);
+    //   }
+    //   stalkers[socket.id] = { user: user, socket: socket };
+    // }
 
     // Notify all stalkers of position change
     for (stalker in stalkers) {
