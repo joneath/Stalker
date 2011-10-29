@@ -217,7 +217,7 @@ Object.append(APP, new Events,new Options, {
     //console.log(this);
     if(this.user.position && matchesExactly(this.user.position, position)) return;
     var self = this;
-    console.log(position);
+    this.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
     this.user.position = position;
     this.fireEvent('User.Position.Changed', self.user.position);
   }
