@@ -223,7 +223,7 @@ Object.append(APP, new Events,new Options, {
     var self = this;
     console.log(stalker);
     var latLng = new google.maps.LatLng(stalker.position.coords.latitude, stalker.position.coords.longitude);
-    self.Map.setZoom(20);
+    self.Map.setZoom(18);
     
     this.markers[stalker.id] = this.markers[stalker.id] || new google.maps.Marker({
       map: self.Map,
