@@ -1,33 +1,5 @@
 matchesExactly = function(expected, actual) {
-  var a1, a2,
-    l, i,
-    key
-  
-  var getKeys = function(o) {
-    var a = [];
-    for(key in o) {
-      if(o.hasOwnProperty(key)) {
-        a.push(key);
-      }
-    }
-    return a;
-  }
-  a1 = getKeys(actual);
-  a2 = getKeys(expected);
-  
-  l = a1.length;
-  if(l !== a2.length) {
-    return false;
-  }
-  for(i = 0; i < l; i++) {
-    key = a1[i];
-    if (key != a2[i]) return false;
-    if (actual[key] != expected[key]) return false;
-    // expect(key).toEqual(a2[i]);
-    // expect(actual[key]).toEqual(expected[key]);
-  }
-  
-  return true;
+  return (expected.coords.latitude == actual.coords.latitude) || (expected.coords.longitude == actual.coords.longitude);
 };
 
 Element.implement({

@@ -1,3 +1,6 @@
+plotStalker = function(user){
+  console.log(user)
+}
 var APP = {};
 Object.append(APP, new Events,new Options, {
   user: {
@@ -9,13 +12,41 @@ Object.append(APP, new Events,new Options, {
     this.addFB();
     this.addGoogleMaps();
     this.attachEvents();
+    this.setupToggle();
+  }
+  ,setupToggle: function(){
+    var self = this;
+    this.toggler = $('toggle-pane');
+    this.mapPane = $('app-map-wrapper');
+    this.notificationPane = $('app-notifications-wrapper');
+    
+    this.toggler.addEvent('click', function(el){
+      var clicked = this.retrieve('clicked');
+      if(clicked){
+        self.mapPane.show();
+        self.notificationPane.hide();
+      } else {
+        self.mapPane.hide();
+        self.notificationPane.show();
+      }
+      this.store('clicked', clicked?false:true);
+    });
+    
   }
   ,attachEvents: function(){
     var self = this;
+    var eventCount = 0;
     this.addEvent('User.Position.Changed', function(position){
       self.socket.emit('position_change', self.user);
 
-      self.update_fb_status(position);
+      console.log(self.socket.socket.sessionid);
+
+      if (eventCount % 6 == 0){
+        self.update_fb_status(position);
+      }
+      eventCount += 1;
+      
+      self.publishNotification(self.user.me + ' has moved.');
 
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -24,6 +55,7 @@ Object.append(APP, new Events,new Options, {
         self.addEvent('Map.Ready', function(){
           if(!self.Map) throw new Error('Map wasn\'t really ready.');
           self.Map.panTo(latLng);
+          self.Map.setZoom(10);
           
           var marker = new google.maps.Marker({
             position: latLng, 
@@ -105,15 +137,20 @@ Object.append(APP, new Events,new Options, {
   ,getFBUser: function(){
     var self = this;
     FB.api('/me', function(response) {
+      Object.append(self.user, response);
       self.fireEvent('FB.LoggedIn');
       self.hideLoginOverlay();
     });
   }
 
-  ,update_fb_status: function(){
-    FB.api('/me/stalker_local:stalk', function(data){
-      console.log(data);
+  ,publishNotification: function(message){
+    var self = this;
+    FB.api('/me/stalker_local:stalk', {location: window.location.href + self.socket.socket.sessionid}, function(data){
+      this.notificationPane.adopt(new Element('li',{
+        text: message
+      }));
     });
+    
   }
   
   // Google Maps methods
@@ -138,7 +175,7 @@ Object.append(APP, new Events,new Options, {
     self.socket = io.connect(window.location.href);
     self.socket.on('position_change', function (user) {
       // Plot stalker
-      plotStalker(user);
+      self.plotStalker(user);
     });
   }
   ,getMap: function(){
@@ -152,7 +189,7 @@ Object.append(APP, new Events,new Options, {
     this.addEvent('GoogleMaps.Ready',function(){
       var latLng = new google.maps.LatLng(37.0625,-95.677068);
       self.Map = new google.maps.Map(map,{
-        zoom: 16,
+        zoom: 4,
         center: latLng,
         mapTypeControl: false,
         navigationControlOptions: {
@@ -163,7 +200,7 @@ Object.append(APP, new Events,new Options, {
       console.log(self.Map);
       
       map.store('initialized', true);
-      map.inject($('app-content'));
+      map.inject($('app-map-wrapper'));
       self.fireEvent('Map.Ready:latched', self.Map);
     });
   }
