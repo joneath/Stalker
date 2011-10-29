@@ -16,6 +16,8 @@ Object.append(APP, new Events,new Options, {
     this.addEvent('User.Position.Changed', function(position){
       self.socket.emit('position_change', self.user);
 
+      console.log(self.socket.socket.sessionid);
+
       if (eventCount % 6 == 0){
         self.update_fb_status(position);
       }
