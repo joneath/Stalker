@@ -1,5 +1,5 @@
 matchesExactly = function(expected, actual) {
-  return JSON.stringify(expected) == JSON.stringify(actual);
+  return (expected.coords.latitude == actual.coords.latitude) || (expected.coords.longitude == actual.coords.longitude);
 };
 
 Element.implement({

@@ -12,18 +12,44 @@ Object.append(APP, new Events,new Options, {
     this.addFB();
     this.addGoogleMaps();
     this.attachEvents();
+    this.setupToggle();
+  }
+  ,setupToggle: function(){
+    var self = this;
+    this.toggler = $('toggle-pane');
+    this.mapPane = $('app-map-wrapper');
+    this.notificationPane = $('app-notifications-wrapper');
+    
+    this.toggler.addEvent('click', function(el){
+      var clicked = this.retrieve('clicked');
+      if(clicked){
+        self.mapPane.show();
+        self.notificationPane.hide();
+      } else {
+        self.mapPane.hide();
+        self.notificationPane.show();
+      }
+      this.store('clicked', clicked?false:true);
+    });
+    
   }
   ,attachEvents: function(){
     var self = this;
     var eventCount = 0;
     this.addEvent('User.Position.Changed', function(position){
       self.socket.emit('position_change', self.user);
+<<<<<<< Updated upstream
 
       if (eventCount % 6 == 0){
         self.update_fb_status(position);
       }
       eventCount += 1;
 
+=======
+      
+      self.publishNotification(self.user.me + ' has moved.');
+      
+>>>>>>> Stashed changes
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
@@ -119,12 +145,14 @@ Object.append(APP, new Events,new Options, {
     });
   }
 
-  ,update_fb_status: function(){
+  ,publishNotification: function(message){
     var self = this;
-    console.log(window.location.href + self.socket.socket.sessionid);
     FB.api('/me/stalker_local:stalk', {location: window.location.href + self.socket.socket.sessionid}, function(data){
-      console.log(data);
+      this.notificationPane.adopt(new Element('li',{
+        text: message
+      }));
     });
+    
   }
   
   // Google Maps methods

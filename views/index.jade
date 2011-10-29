@@ -1,8 +1,9 @@
 div#app-wrapper
   div#app-title
     h1= title
-  div#app-map-wrapper
+    a#toggle-pane Toggle
+  div#app-map-wrapper.full-page
     div#login-overlay(style="display:none;")
       div(id="fb_login")
-  div#app-notifications-wrapper
+  div#app-notifications-wrapper.full-page
     ul#notifications
