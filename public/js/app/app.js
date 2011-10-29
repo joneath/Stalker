@@ -38,18 +38,14 @@ Object.append(APP, new Events,new Options, {
     var eventCount = 0;
     this.addEvent('User.Position.Changed', function(position){
       self.socket.emit('position_change', self.user);
-<<<<<<< Updated upstream
 
       if (eventCount % 6 == 0){
         self.update_fb_status(position);
       }
       eventCount += 1;
-
-=======
       
       self.publishNotification(self.user.me + ' has moved.');
-      
->>>>>>> Stashed changes
+
       self.addEvent('GoogleMaps.Ready',function(){
         var latLng = self.user.latLng = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 
