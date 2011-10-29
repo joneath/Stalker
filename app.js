@@ -40,7 +40,7 @@ app.get('/:socket_id', function (req, res) {
   var socketId = req.params.socket_id;
   var stalker  = stalkers[socketId];
 
-  res.render('stalker', { layout: false, stalker: stalkers });  
+  res.render('stalker', { layout: false, stalker: stalker });  
 });
 
 // Socket I/O
@@ -67,12 +67,12 @@ io.sockets.on('connection', function (socket) {
   });
 
   // List to disconnect
-  socket.on('disconnect', function() {
-    // Remove from list of stalkers after 60 seconds
-    setTimeout(function() {
-      delete stalkers[socket.id];
-    }, 60000);
-  });
+  // socket.on('disconnect', function() {
+  //   // Remove from list of stalkers after 60 seconds
+  //   setTimeout(function() {
+  //     delete stalkers[socket.id];
+  //   }, 60000);
+  // });
 
 });
 
