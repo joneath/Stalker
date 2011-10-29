@@ -109,7 +109,7 @@ Object.append(APP, new Events,new Options, {
   ,getFBUser: function(){
     var self = this;
     FB.api('/me', function(response) {
-      Object.append(self.user, response.data);
+      Object.append(self.user, response);
       self.fireEvent('FB.LoggedIn');
       self.hideLoginOverlay();
     });
