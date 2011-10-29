@@ -63,11 +63,6 @@ Object.append(APP, new Events,new Options, {
       self.plotStalker(user);
     });
     
-    this.socket.on('position_change', function (user) {
-      // Plot stalker
-      self.plotStalker(user);
-    });
-    
     this.addEvent('FB.Initialized', this.checkFBAuth);
     
     this.addEvent('GoogleMaps.Ready', this.getMap);
