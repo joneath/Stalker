@@ -140,7 +140,6 @@ Object.append(APP, new Events,new Options, {
     var self = this;
     FB.api('/me', function(response) {
       Object.append(self.user, response);
-      self.marker = new google.maps.Marker
       self.fireEvent('FB.LoggedIn');
       self.hideLoginOverlay();
     });
