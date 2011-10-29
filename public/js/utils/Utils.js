@@ -29,3 +29,21 @@ matchesExactly = function(expected, actual) {
   
   return true;
 };
+
+Element.implement({
+  hide: function(){
+  		var d;
+  		try {
+  			//IE fails here if the element is not in the dom
+  			d = this.getStyle('display');
+  		} catch(e){}
+  		if (d == 'none') return this;
+  		return this.store('element:_originalDisplay', d || '').setStyle('display', 'none');
+  	},
+
+  	show: function(display){
+  		if (!display && this.isDisplayed()) return this;
+  		display = display || this.retrieve('element:_originalDisplay') || 'block';
+  		return this.setStyle('display', (display == 'none') ? 'block' : display);
+  	}
+});
